@@ -2,7 +2,7 @@
   "id": "item-piles-vagabond",
   "title": "Item Piles: Vagabond",
   "description": "This module adds support for the Vagabond system within the Item Piles module",
-  "version": "0.9",
+  "version": "1.0",
   "library": false,
   "compatibility": {
     "minimum": "12",
