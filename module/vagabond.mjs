@@ -14,6 +14,21 @@ Hooks.once("item-piles-ready", async () => {
             // The path to the quantity value on an item
             "ITEM_QUANTITY_ATTRIBUTE": "system.quantity",
 
+            // GM manual price-edit field in Item Piles' item editor writes here.
+            // Vagabond has no single price field, so this only carries whole/fractional
+            // gold; silver/copper on the item are left untouched by that edit.
+            "ITEM_PRICE_ATTRIBUTE": "system.baseCost.gold",
+
+            // Vagabond splits item cost across system.baseCost.{gold,silver,copper}
+            // instead of one field, so flatten it to a gold-equivalent number for
+            // all read paths (merchant math, vault totals, trade dialog).
+            "ITEM_COST_TRANSFORMER": (item, defaultCurrencies) => {
+                const cost = item?.system?.baseCost
+                    ?? foundry.utils.getProperty(item, "system.baseCost")
+                    ?? {};
+                return (cost.gold ?? 0) * 1 + (cost.silver ?? 0) * 0.1 + (cost.copper ?? 0) * 0.01;
+            },
+
             // Filter out abstract items so only physical "equipment" can be looted
             "ITEM_FILTERS": [
                 {
