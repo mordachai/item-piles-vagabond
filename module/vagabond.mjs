@@ -26,7 +26,7 @@ Hooks.once("item-piles-ready", async () => {
                 const cost = item?.system?.baseCost
                     ?? foundry.utils.getProperty(item, "system.baseCost")
                     ?? {};
-                return (cost.gold ?? 0) * 1 + (cost.silver ?? 0) * 0.1 + (cost.copper ?? 0) * 0.01;
+                return (cost.gold ?? 0) * 1 + (cost.silver ?? 0) * 0.01 + (cost.copper ?? 0) * 0.0001;
             },
 
             // Filter out abstract items so only physical "equipment" can be looted
@@ -44,7 +44,9 @@ Hooks.once("item-piles-ready", async () => {
             // Items that should never stack
             "UNSTACKABLE_ITEM_TYPES": [],
 
-            // Currency definitions matching Vagabond's data paths
+            // Currency definitions matching Vagabond's data paths.
+            // Vagabond's own conversion (downtime-app.mjs) is 1 gold = 100 silver = 10000 copper,
+            // not the dnd5e-style base-10 split — exchangeRate below must match that.
             "CURRENCIES": [
                 {
                     "type": "attribute",
@@ -66,7 +68,7 @@ Hooks.once("item-piles-ready", async () => {
                         "path": "system.currency.silver"
                     },
                     "primary": false,
-                    "exchangeRate": 0.1
+                    "exchangeRate": 0.01
                 },
                 {
                     "type": "attribute",
@@ -77,7 +79,7 @@ Hooks.once("item-piles-ready", async () => {
                         "path": "system.currency.copper"
                     },
                     "primary": false,
-                    "exchangeRate": 0.01
+                    "exchangeRate": 0.0001
                 }
             ]
         }
